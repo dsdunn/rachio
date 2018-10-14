@@ -34,8 +34,24 @@ class Timer extends Component {
     })
   }
 
-  secondsToTime = (seconds) => {
-    
+  secondsToTime = (totalSeconds) => {
+    let seconds = totalSeconds % 60 < 9 ? '0' + totalSeconds % 60 : totalSeconds % 60;
+    let minutes = (totalSeconds - seconds) / 60;
+    let hours;
+
+    if (minutes > 59) {
+      let minLeft = minutes % 60;
+
+      hours = (minutes - minLeft) / 60;
+      minutes = minLeft;
+    } if (minutes < 10) {
+      minutes = '0' + minutes;
+    }
+    return hours ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
+  }
+
+  timeToSeconds = (time) => {
+
   }
 
   //pause: putDuration(0) unpause: putDuration(this.state.remaining) reset: putDuration(0) setState({remaining: 0})
@@ -46,7 +62,7 @@ class Timer extends Component {
     })
   }
 
-  handleClick = (event) => {
+  startOrStop = (event) => {
     let running = !this.state.running;
 
     this.setState({
@@ -62,13 +78,26 @@ class Timer extends Component {
     }
   }
 
+  adjustMinutes = (addition) => {
+    let remaining = this.state.remaining + addition;
+    this.setState({
+      remaining
+    })
+  }
+
   render() {
+    let timeRemaining = this.secondsToTime(this.state.remaining);
+
     return (
         <div className='timer'>
-          <button className='timer-start-button' onClick={this.handleClick}></button>
-          <label htmlFor='timer-remaining'>time remaining</label>
-          <input className='timer-set-time' type='time' min='0' value={this.state.remaining} onChange={this.handleChange}/>
-          <div className='timer-countdown-display'>{this.state.remaining}</div>
+          <button className='timer-start-button' onClick={this.startOrStop}></button>
+          <label htmlFor='timer-remaining'>hours</label>
+          <input className='timer-set-time' defaultValue={timeRemaining} placeholder='h:mm'/>
+          <div className='timer-countdown-display'>{timeRemaining}</div>
+          <div className='timer-adjust-buttons'>
+            <div className='timer-add-minute' onClick={() => this.adjustMinutes(60)}>+</div>
+            <div className='timer-subtract-minute' onClick={() => this.adjustMinutes(-60)}>-</div>
+          </div>
         </div>
       )
   }
