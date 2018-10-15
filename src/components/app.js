@@ -47,7 +47,7 @@ class App extends Component {
     if (!running) {
       this.setState({
         allOn: false,
-        allTimeLeft: 0
+        allTimeLeft: 60
       })
     } else {
       this.setState({

@@ -11,21 +11,17 @@ class Timer extends Component {
     }
   }
 
-  componentDidMount(){
-    if (this.props.allOn) {
-      console.log(this.props.allTimeLeft)
-      this.setState({
-        remaining: this.props.allTimeLeft,
-        running: true
-      })
-    }
-  }
-
   countDown = () => {
     let intervalId = setInterval(() => {
+      let remaining = this.state.remaining -1;
       this.setState({
-        remaining: this.state.remaining - 1
+        remaining
       });
+
+      if ( this.props.id === 'master-timer') {
+        this.props.editTime(remaining);
+      }
+
       if (this.state.remaining === 0) {
         this.stopCountdown();
       }
@@ -90,7 +86,6 @@ class Timer extends Component {
 
   handleMasterStartOrStop = (running) => {
     if (running) {  
-      this.props.editTime(this.state.remaining);
       this.countDown();
     } else {
       this.stopCountDown();
@@ -99,7 +94,7 @@ class Timer extends Component {
   }
 
   render() {
-    let timeRemaining = this.secondsToTime(this.state.remaining);
+    let timeRemaining = this.props.allOn ? this.secondsToTime(this.props.allTimeLeft) : this.secondsToTime(this.state.remaining);
 
     return (
         <div className='timer'>
