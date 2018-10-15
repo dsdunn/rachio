@@ -16,6 +16,7 @@
 .env.test.local
 .env.production.local
 .babelrc
+src/apiKey.js
 
 npm-debug.log*
 yarn-debug.log*
