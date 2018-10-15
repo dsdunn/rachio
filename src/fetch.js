@@ -25,5 +25,6 @@ export const startZone = (body) => {
 }
 
 export const startAll = (body) => {
+  console.log(options("PUT", body))
   return fetch(url + 'zone/start_multiple', options('PUT', JSON.stringify(body)));
 }

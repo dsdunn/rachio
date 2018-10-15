@@ -8,7 +8,7 @@ class App extends Component {
     super();
     this.state = {
       zones: [],
-      allTimeLeft: 0,
+      allTimeLeft: 60,
       allOn: false
     }
   }
@@ -36,13 +36,24 @@ class App extends Component {
     })
   }
 
-  startAll = () => {
-    if (this.state.allOn){
+  editTime = (time) => {
+    this.setState({
+      allTimeLeft: time
+    })
+  }
+
+  startOrStopAll = (running) => {
+    if (!running) {
       this.setState({
         allOn: false,
         allTimeLeft: 0
       })
+    } else {
+      this.setState({
+        allOn: true
+      })
     }
+
     let zones = this.state.zones.map(zone => ({
       id: zone.id,
       duration: this.state.allTimeLeft,
@@ -58,12 +69,12 @@ class App extends Component {
         <h1 onClick={this.getZones}>Rachio App</h1>
         <section className='controls'>
           <div className='all-zones-control'>
-            <Timer id='master-timer' startAll={this.startAll}/>
+            <Timer id='master-timer' startOrStopAll={this.startOrStopAll} editTime={this.editTime}/>
           </div>
           {this.populateZones(this.state.zones)}
         </section>
       </div>
-      )
+    )
   }
 }
 

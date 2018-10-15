@@ -11,6 +11,15 @@ class Timer extends Component {
     }
   }
 
+  componentDidMount(){
+    if (this.props.allOn) {
+      this.setState({
+        remaining: this.props.allTimeLeft,
+        running: true
+      })
+    }
+  }
+
   countDown = () => {
     let intervalId = setInterval(() => {
       this.setState({
@@ -27,10 +36,11 @@ class Timer extends Component {
 
   }
 
-  stopCountdown = () => {
+  stopCountDown = () => {
     clearInterval(this.state.intervalId)
     this.setState({
-      running: false
+      running: false,
+      remaining: 60
     })
   }
 
@@ -44,44 +54,47 @@ class Timer extends Component {
 
       hours = (minutes - minLeft) / 60;
       minutes = minLeft;
-    } if (minutes < 10) {
+    } 
+    if (minutes < 10) {
       minutes = '0' + minutes;
     }
     return hours ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
   }
 
   handleChange = (event) => {
+    let remaining = parseInt(event.target.value) * 60;
     this.setState({
-      remaining: parseInt(event.target.value) * 60
+      remaining
     })
   }
 
   startOrStop = (event) => {
-    if(this.props.id === 'master-timer') {
-      this.props.startAll();
-    }
     let running = !this.state.running;
 
     this.setState({
       running
     }) 
+    if (this.props.id === 'master-timer') {
+      this.handleMasterStartOrStop(running);
+      return;
+    }
     if (running) {
       startZone({id: this.props.id , duration: this.state.remaining})
       .then(this.countDown())
     } else {
-      this.setState({
-        remaining: 60
-      })
       startZone({id: this.props.id, duration: 0});
-      this.stopCountdown();
+      this.stopCountDown();
     }
   }
 
-  adjustMinutes = (addition) => {
-    let remaining = this.state.remaining + addition;
-    this.setState({
-      remaining
-    })
+  handleMasterStartOrStop = (running) => {
+    if (running) {  
+      this.props.editTime(this.state.remaining);
+      this.countDown();
+    } else {
+      this.stopCountDown();
+    }
+    this.props.startOrStopAll(running);
   }
 
   render() {
@@ -93,10 +106,6 @@ class Timer extends Component {
           <label htmlFor='timer-remaining'>set timer in minutes</label>
           <input className={`timer-set-time timer-countdown-display ${this.state.running ? 'hidden' : ''}`} type='number' min='0' max='180' value={this.state.remaining / 60} onChange={this.handleChange}/>
           <span className={`timer-countdown-display ${!this.state.running ? 'hidden' : ''}`}>{timeRemaining}</span>
-          {/*<form name="edit-time" className='timer-adjust-buttons'>
-            <input className='timer-add-minute' />
-            <div className='timer-subtract-minute' onClick={() => this.adjustMinutes(-60)}>-</div>
-          </form>*/}
         </div>
       )
   }
