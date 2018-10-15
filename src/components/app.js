@@ -17,7 +17,8 @@ class App extends Component {
     getZones('c96cbfa4-73c2-4bb4-9924-3fb333624862')
     .then(zones => {
       let sortedZones = zones.sort((a,b) => a.zoneNumber - b.zoneNumber);
-      this.setState({zones: sortedZones})
+      let enabledZones = sortedZones.filter(zone => zone.enabled);
+      this.setState({zones: enabledZones})
     })
   }
 
@@ -60,13 +61,13 @@ class App extends Component {
       sortOrder: zone.zoneNumber
     }));
 
-    startAll(zones);
+    startAll({'zones': zones})
   }
 
   render() {
     return (
       <div className='app'>
-        <h1 onClick={this.getZones}>Rachio App</h1>
+        <h1>Rachio App</h1>
         <section className='controls'>
           <div className='all-zones-control'>
             <Timer id='master-timer' startOrStopAll={this.startOrStopAll} editTime={this.editTime}/>

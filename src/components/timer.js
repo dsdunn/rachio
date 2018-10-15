@@ -13,6 +13,7 @@ class Timer extends Component {
 
   componentDidMount(){
     if (this.props.allOn) {
+      console.log(this.props.allTimeLeft)
       this.setState({
         remaining: this.props.allTimeLeft,
         running: true

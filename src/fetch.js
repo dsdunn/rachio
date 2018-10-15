@@ -1,6 +1,3 @@
-//get zones (device)
-//start zone, stop zone
-//start/stop mulitiple zones
 
 import { apiKey } from './apiKey';
 
@@ -24,7 +21,7 @@ export const startZone = (body) => {
   return fetch(url + 'zone/start' , options('PUT', JSON.stringify(body)));
 }
 
-export const startAll = (body) => {
-  console.log(options("PUT", body))
+export const startAll = (body) => { 
+  console.log(JSON.stringify(body))
   return fetch(url + 'zone/start_multiple', options('PUT', JSON.stringify(body)));
 }
