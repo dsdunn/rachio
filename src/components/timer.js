@@ -5,7 +5,7 @@ class Timer extends Component {
     super(props);
     this.state = {
       running: false,
-      remaining: 30,
+      remaining: 60,
       intervalId: ''
     }
   }
@@ -50,15 +50,9 @@ class Timer extends Component {
     return hours ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
   }
 
-  timeToSeconds = (time) => {
-
-  }
-
-  //pause: putDuration(0) unpause: putDuration(this.state.remaining) reset: putDuration(0) setState({remaining: 0})
-
   handleChange = (event) => {
     this.setState({
-      remaining: parseInt(event.target.value)
+      remaining: parseInt(event.target.value) * 60
     })
   }
 
@@ -72,7 +66,7 @@ class Timer extends Component {
       this.countDown();
     } else {
       this.setState({
-        remaining: 30
+        remaining: 60
       })
       this.stopCountdown();
     }
@@ -91,13 +85,13 @@ class Timer extends Component {
     return (
         <div className='timer'>
           <button className='timer-start-button' onClick={this.startOrStop}></button>
-          <label htmlFor='timer-remaining'>hours</label>
-          <input className='timer-set-time' defaultValue={timeRemaining} placeholder='h:mm'/>
-          <div className='timer-countdown-display'>{timeRemaining}</div>
-          <div className='timer-adjust-buttons'>
-            <div className='timer-add-minute' onClick={() => this.adjustMinutes(60)}>+</div>
+          <label htmlFor='timer-remaining'>set timer in minutes</label>
+          <input className={`timer-set-time timer-countdown-display ${this.state.running ? 'hidden' : ''}`} type='number' min='0' max='180' value={this.state.remaining / 60} onChange={this.handleChange}/>
+          <span className={`timer-countdown-display ${!this.state.running ? 'hidden' : ''}`}>{timeRemaining}</span>
+          {/*<form name="edit-time" className='timer-adjust-buttons'>
+            <input className='timer-add-minute' />
             <div className='timer-subtract-minute' onClick={() => this.adjustMinutes(-60)}>-</div>
-          </div>
+          </form>*/}
         </div>
       )
   }
