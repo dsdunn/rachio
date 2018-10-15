@@ -5,18 +5,25 @@
 import { apiKey } from './apiKey';
 
 const url = 'https://api.rach.io/1/public/';
-const options = {
+const options = (method = 'GET', body) => ({
+  method,
   headers: {
+    'Content-Type': 'application/json',
     Authorization: `Bearer ${apiKey}`
-  }
-}
+  },
+  body
+})
 
 export const getZones = (id) => {
-  return fetch(url + 'device/' + id, options)
+  return fetch(url + 'device/' + id, options())
   .then(response => response.json())
-  .then(results => results.zones.map(zone => ({
-    id: zone.id,
-    name: zone.name,
-    zoneNumber: zone.zoneNumber
-  })));
+  .then(results => results.zones);
+}
+
+export const startZone = (body) => {
+  return fetch(url + 'zone/start' , options('PUT', JSON.stringify(body)));
+}
+
+export const startAll = (body) => {
+  return fetch(url + 'zone/start_multiple', options('PUT', JSON.stringify(body)));
 }

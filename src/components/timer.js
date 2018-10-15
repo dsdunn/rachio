@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { startZone } from '../fetch';
 
 class Timer extends Component {
   constructor(props){
@@ -11,7 +12,6 @@ class Timer extends Component {
   }
 
   countDown = () => {
-    console.log('started')
     let intervalId = setInterval(() => {
       this.setState({
         remaining: this.state.remaining - 1
@@ -57,17 +57,22 @@ class Timer extends Component {
   }
 
   startOrStop = (event) => {
+    if(this.props.id === 'master-timer') {
+      this.props.startAll();
+    }
     let running = !this.state.running;
 
     this.setState({
       running
     }) 
     if (running) {
-      this.countDown();
+      startZone({id: this.props.id , duration: this.state.remaining})
+      .then(this.countDown())
     } else {
       this.setState({
         remaining: 60
       })
+      startZone({id: this.props.id, duration: 0});
       this.stopCountdown();
     }
   }
