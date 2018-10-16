@@ -6,63 +6,58 @@ class Timer extends Component {
     super(props);
     this.state = {
       running: false,
-      remaining: 60,
+      remaining: 0,
       intervalId: ''
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.allOn !== this.props.allOn) {
+      this.setState({
+        running: this.props.allOn,
+        remaining: this.props.allTimeLeft
+      })
+    } 
+  }
+
   countDown = () => {
     let intervalId = setInterval(() => {
-      let remaining = this.state.remaining -1;
+      let remaining = this.state.remaining - 1;
       this.setState({
         remaining
       });
 
-      if ( this.props.id === 'master-timer') {
-        this.props.editTime(remaining);
+      if (this.state.remaining <= 0) {
+        this.stopCountDown();
       }
 
-      if (this.state.remaining === 0) {
-        this.stopCountdown();
+      if (this.props.id === 'master-timer') {
+        this.props.editTime(remaining);
       }
     }, 1000)
 
     this.setState({
       intervalId
     })
-
   }
 
   stopCountDown = () => {
     clearInterval(this.state.intervalId)
     this.setState({
       running: false,
-      remaining: 60
+      remaining: 0
     })
-  }
-
-  secondsToTime = (totalSeconds) => {
-    let seconds = totalSeconds % 60 < 9 ? '0' + totalSeconds % 60 : totalSeconds % 60;
-    let minutes = (totalSeconds - seconds) / 60;
-    let hours;
-
-    if (minutes > 59) {
-      let minLeft = minutes % 60;
-
-      hours = (minutes - minLeft) / 60;
-      minutes = minLeft;
-    } 
-    if (minutes < 10) {
-      minutes = '0' + minutes;
-    }
-    return hours ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
   }
 
   handleChange = (event) => {
     let remaining = parseInt(event.target.value) * 60;
+
     this.setState({
       remaining
     })
+    if (this.props.id === 'master-timer') {
+      this.props.editTime(remaining);
+    }
   }
 
   startOrStop = (event) => {
@@ -93,17 +88,41 @@ class Timer extends Component {
     this.props.startOrStopAll(running);
   }
 
+  secondsToTime = (totalSeconds) => {
+    let seconds = totalSeconds % 60 < 9 ? '0' + totalSeconds % 60 : totalSeconds % 60;
+    let minutes = (totalSeconds - seconds) / 60;
+    let hours;
+
+    if (minutes > 59) {
+      let minLeft = minutes % 60;
+
+      hours = (minutes - minLeft) / 60;
+      minutes = minLeft;
+    } 
+    if (minutes < 10) {
+      minutes = '0' + minutes;
+    }
+    return hours ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
+  }
+
   render() {
     let timeRemaining = this.props.allOn ? this.secondsToTime(this.props.allTimeLeft) : this.secondsToTime(this.state.remaining);
+    let buttonLabel = this.state.running ? 'Reset' : 'Start';
 
     return (
         <div className='timer'>
-          <button className='timer-start-button' onClick={this.startOrStop}></button>
-          <label htmlFor='timer-remaining'>set timer in minutes</label>
-          <input className={`timer-set-time timer-countdown-display ${this.state.running ? 'hidden' : ''}`} type='number' min='0' max='180' value={this.state.remaining / 60} onChange={this.handleChange}/>
-          <span className={`timer-countdown-display ${!this.state.running ? 'hidden' : ''}`}>{timeRemaining}</span>
+          <button className={`timer-start-button ${this.props.allOn ? 'hidden' : ''}`} onClick={this.startOrStop}>{buttonLabel}</button>
+          {!this.state.running &&
+            <div className='timer-form'>
+              <input className='timer-set-time timer-countdown-display' type='number' min='0' max='180' value={this.state.remaining / 60} onChange={this.handleChange}/>
+            </div>
+          }
+          {this.state.running &&
+            <span className='timer-countdown-display'>{timeRemaining}</span>
+          }
         </div>
       )
   }
 }
+
 export default Timer;
