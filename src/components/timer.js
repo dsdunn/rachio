@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { startZone } from '../fetch';
+import { secondsToTime } from '../secondsToTime';
 
 class Timer extends Component {
   constructor(props){
@@ -88,25 +89,8 @@ class Timer extends Component {
     this.props.startOrStopAll(running);
   }
 
-  secondsToTime = (totalSeconds) => {
-    let seconds = totalSeconds % 60 < 9 ? '0' + totalSeconds % 60 : totalSeconds % 60;
-    let minutes = (totalSeconds - seconds) / 60;
-    let hours;
-
-    if (minutes > 59) {
-      let minLeft = minutes % 60;
-
-      hours = (minutes - minLeft) / 60;
-      minutes = minLeft;
-    } 
-    if (minutes < 10) {
-      minutes = '0' + minutes;
-    }
-    return hours ? `${hours}:${minutes}:${seconds}` : `${minutes}:${seconds}`;
-  }
-
   render() {
-    let timeRemaining = this.props.allOn ? this.secondsToTime(this.props.allTimeLeft) : this.secondsToTime(this.state.remaining);
+    let timeRemaining = this.props.allOn ? secondsToTime(this.props.allTimeLeft) : secondsToTime(this.state.remaining);
     let buttonLabel = this.state.running ? 'Reset' : 'Start';
 
     return (
