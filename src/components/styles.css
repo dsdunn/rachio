@@ -6,6 +6,8 @@
 .app {
   padding: 2%;
   background-color: #e3f1e6;
+  height: 100vh;
+  margin: -1%;
 }
 
 .all-zones-control {
