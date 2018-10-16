@@ -22,27 +22,26 @@
 }
 
 .zone {
-  width: 15rem;
   display: flex;
   flex-direction: column;
-  margin: .5% auto 1% auto;
+  width: 15rem;
+  margin-top: .5%;
+  margin-bottom: 1%;
   padding: 1.5%;
 }
 
 .zone-name {
+  margin: 2% auto;
   font-size: 1.6em;
   font-weight: 300;
-  margin: 2% auto;
 }
 
 .timer {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: center;
 }
 
 .timer-start-button {
-  display: inline-block;
   height: 4.8vh;
   width: 5.5rem;
   margin-right: 1%;
@@ -56,7 +55,6 @@
  }
 
 .timer-countdown-display {
-  /*width: 15vw;*/
   height: 4.8vh;
   font-size: 2.4em;
   text-align: center;
@@ -64,5 +62,5 @@
 }
 
 .hidden {
-  visibility: hidden;
+  display: none;
 }
