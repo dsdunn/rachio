@@ -1,3 +1,68 @@
+* {
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+.app {
+  padding: 2%;
+  background-color: #e3f1e6;
+}
+
+.all-zones-control {
+  display: flex;
+  justify-content: center;
+  margin: 4%;
+}
+
+.zones-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.zone {
+  width: 15rem;
+  display: flex;
+  flex-direction: column;
+  margin: .5% auto 1% auto;
+  padding: 1.5%;
+}
+
+.zone-name {
+  font-size: 1.6em;
+  font-weight: 300;
+  margin: 2% auto;
+}
+
+.timer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.timer-start-button {
+  display: inline-block;
+  height: 4.8vh;
+  width: 5.5rem;
+  margin-right: 1%;
+  font-size: 1.6em;
+  font-weight: 300;
+}
+
+.timer-set-time {
+  border: none;
+  background: none;
+ }
+
+.timer-countdown-display {
+  /*width: 15vw;*/
+  height: 4.8vh;
+  font-size: 2.4em;
+  text-align: center;
+  border: 1px solid gray;
+}
+
 .hidden {
-  display: none;
+  visibility: hidden;
 }
